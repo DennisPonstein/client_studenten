@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Testen webcomponets</title>
+    <style>
+      p {
+        font-weight: bold;
+        color: blueviolet;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+          "Lucida Sans", Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Dit is normale text</p>
+
+    <template id="my-component-template">
+      <style>
+        p {
+          font-weight: bold;
+          color: greenyellow;
+        }
+      </style>
+
+      <p>
+        <slot name="chat-message"> default chat template message</slot>
+      </p>
+    </template>
+
+    <mijn-component><div slot="chat-message">test</div></mijn-component>
+    <mijn-component></mijn-component>
+    <mijn-component></mijn-component>
+
+    <script>
+      class my_component extends HTMLElement {
+        constructor() {
+          super();
+          let template = document.getElementById("my-component-template");
+          let templateContent = template.content;
+
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+          shadowRoot.appendChild(templateContent.cloneNode(true));
+        }
+      }
+
+      customElements.define("mijn-component", my_component);
+    </script>
+  </body>
+</html>

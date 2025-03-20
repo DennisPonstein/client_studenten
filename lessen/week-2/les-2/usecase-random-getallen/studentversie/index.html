@@ -1,36 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Usecase random getallen </title>
-</head>
-<body>
-
-<script>
-
-    const main = async () => {
+  <head>
+    <meta charset="UTF-8" />
+    <title>Usecase random getallen</title>
+  </head>
+  <body>
+    <script>
+      const main = async () => {
         const aantalRandomGetallen = 10;
         const requestPromises = [];
+        let sum = 0;
 
         for (let i = 0; i < aantalRandomGetallen; i++) {
-            requestPromises.push(fetch('http://localhost:3000/random'));
+          requestPromises.push(fetch("http://localhost:3000/random"));
         }
 
+        //console.log(requestPromises);
         //student uitwerking
+        const responses = [];
 
-        let sum = 0;
-        for(const response of responses) {
+        await Promise.all(requestPromises)
+          .then((responses) =>
+            Promise.all(responses.map((response) => response.json()))
+          ) // Convert all responses to JSON
+          .then((data) => {
+            data.forEach((item) => {
+              console.log(item.random);
+              sum += item.random;
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
 
-            //student uitwerking
-        }
+        console.log("sum: " + sum);
+      };
 
-        console.log(sum);
-
-    }
-
-    main();
-
-</script>
-
-</body>
+      main();
+    </script>
+  </body>
 </html>
